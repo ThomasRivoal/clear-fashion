@@ -90,16 +90,25 @@ console.log(sorted_product_by_date)
 
 // 🎯 TODO: Filter a specific price range
 // 1. Filter the list of products between 50€ and 100€
+var filter_50_100 = []
+marketplace.forEach(obj => (obj.price>50 && obj.price<100) ? filter_50_100.push(obj) : null)
 // 2. Log the list
+console.log(filter_50_100)
 
 
-// 🎯 TODO: Average Basket
-// 1. Determine the average basket of the marketplace
+// 🎯 TODO: Average price
+// 1. Determine the average price of the marketplace
+var baskets = []
+marketplace.forEach(obj => (obj.name.includes('basket')?baskets.push(obj):null))
+
+var count = 0, sumPrice = 0;
+for (var key in baskets) {
+  sumPrice += baskets[key].price;
+  count += 1;
+}
+
 // 2. Log the average
-
-
-
-
+console.log(sumPrice/count);
 
 /**
  * 🏎
@@ -110,6 +119,15 @@ console.log(sorted_product_by_date)
 
 // 🎯 TODO: Products by brands
 // 1. Create an object called `brands` to manipulate products by brand name
+function groupArrayOfObjects(list, key) {
+  return list.reduce(function(rv, x) {
+    (rv[x[key]] = rv[x[key]] || []).push(x);
+    return rv;
+  }, {});
+};
+
+var brands=groupArrayOfObjects(marketplace,"brand");
+
 // The key is the brand name
 // The value is the array of products
 //
@@ -122,21 +140,35 @@ console.log(sorted_product_by_date)
 // };
 //
 // 2. Log the variable
+console.log(brands)
 // 3. Log the number of products by brands
-
+for(var obj in brands){
+  console.log(obj)
+  console.log(brands[obj].length)
+}
 
 // 🎯 TODO: Sort by price for each brand
 // 1. For each brand, sort the products by price, from highest to lowest
+function sort_by_price_desc(marketplace){
+  return marketplace.sort((a, b) => (a.price > b.price) ? -1 : 1)
+}
+
+var brands_sorted_by_price_desc = brands
+for(var obj in brands_sorted_by_price_desc){
+  brands_sorted_by_price_desc[obj] = sort_by_price_desc(brands_sorted_by_price_desc[obj])
+}
 // 2. Log the sort
+console.log(brands_sorted_by_price_desc)
 
 
 // 🎯 TODO: Sort by date for each brand
 // 1. For each brand, sort the products by date, from old to recent
+var brands_sorted_by_date_asc = brands
+for(var obj in brands_sorted_by_date_asc){
+  brands_sorted_by_date_asc[obj] = sort_by_date_asc(brands_sorted_by_date_asc[obj])
+}
 // 2. Log the sort
-
-
-
-
+console.log(brands_sorted_by_date_asc)
 
 /**
  * 💶
@@ -148,10 +180,15 @@ console.log(sorted_product_by_date)
 // 🎯 TODO: Compute the p90 price value
 // 1. Compute the p90 price value of each brand
 // The p90 value (90th percentile) is the lower value expected to be exceeded in 90% of the products
+var brands_sorted_by_price_asc = brands
+for(var obj in brands_sorted_by_price_asc){
+  brands_sorted_by_price_asc[obj] = sort_by_price_asc(brands_sorted_by_price_asc[obj])
+}
 
-
-
-
+for(var obj in brands_sorted_by_price_asc){
+  console.log(obj)
+  console.log(brands_sorted_by_price_asc[obj][Math.round(brands_sorted_by_price_asc[obj].length*0.9)-1])
+}
 
 /**
  * 🧥
@@ -228,17 +265,29 @@ const COTELE_PARIS = [
 
 // 🎯 TODO: Reasonable price
 // // 1. Log if coteleparis is a reasonable price shop (true or false)
+var is_reasonable = true
+COTELE_PARIS.forEach(obj => (obj.price>100)?is_reasonable=false:null)
 // // A reasonable price if all the products are less than 100€
-
+console.log(is_reasonable)
 
 // 🎯 TODO: Find a specific product
 // 1. Find the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
+var tmp = null
+COTELE_PARIS.forEach(obj => (obj.uuid=="b56c6d88-749a-5b4c-b571-e5b5c6483131")?tmp=obj:null)
 // 2. Log the product
-
+console.log(tmp)
 
 // 🎯 TODO: Delete a specific product
 // 1. Delete the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
-// 2. Log the new list of product
+for( var i = 0; i < COTELE_PARIS.length; i++){ 
+                                   
+  if ( COTELE_PARIS[i].uuid == "b56c6d88-749a-5b4c-b571-e5b5c6483131") { 
+      COTELE_PARIS.splice(i, 1); 
+      i--; 
+  }
+}
+// 2. Log the new list of product    
+console.log(COTELE_PARIS)
 
 // 🎯 TODO: Save the favorite product
 let blueJacket = {
@@ -254,7 +303,10 @@ let jacket = blueJacket;
 jacket.favorite = true;
 
 // 1. Log `blueJacket` and `jacket` variables
+console.log(blueJacket)
+console.log(jacket)
 // 2. What do you notice?
+// Copy didn't work because both are linked by the same variable address
 
 blueJacket = {
   'link': 'https://coteleparis.com/collections/tous-les-produits-cotele/products/la-veste-bleu-roi',
@@ -263,9 +315,13 @@ blueJacket = {
 };
 
 // 3. Update `jacket` property with `favorite` to true WITHOUT changing blueJacket properties
+jacket = {...blueJacket}
+jacket.favorite = true
 
+console.log(blueJacket)
+console.log(jacket)
 
-
+// 3. Update `jacket` property with `favorite` to true WITHOUT changing blueJacket properties
 
 
 /**
