@@ -29,12 +29,11 @@ console.log(MY_FAVORITE_BRANDS[0]);
 // 🎯 TODO: The cheapest t-shirt
 // 0. I have 3 favorite brands stored in MY_FAVORITE_BRANDS variable
 // 1. Create a new variable and assign it the link of the cheapest t-shirt
+
+const cheapest_tshirt = 'https://www.adresse.paris/t-shirts-et-polos/4238-t-shirt-ranelagh-1300000262026.html'
 // I can find on these e-shops
 // 2. Log the variable
-
-
-
-
+console.log(cheapest_tshirt)
 
 /**
  * 👕
@@ -47,26 +46,47 @@ console.log(MY_FAVORITE_BRANDS[0]);
 
 // 🎯 TODO: Number of products
 // 1. Create a variable and assign it the number of products
+var longueur = marketplace.length
 // 2. Log the variable
+console.log(longueur)
 
 
 // 🎯 TODO: Brands name
 // 1. Create a variable and assign it the list of brands name only
+var brand_names = []
+
+for(var i = 0; i < marketplace.length; i++){
+  if(!(brand_names.includes(marketplace[i].brand))){ // includes : true si la valeur est dedans sinon false
+    brand_names.push(marketplace[i].brand)
+  }
+}
 // 2. Log the variable
+console.log(brand_names)
 // 3. Log how many brands we have
+console.log(brand_names.length)
 
 
 // 🎯 TODO: Sort by price
 // 1. Create a function to sort the marketplace products by price
+function sort_by_price_asc(marketplace){
+  return marketplace.sort((a, b) => (a.price > b.price) ? 1 : -1)
+}
 // 2. Create a variable and assign it the list of products by price from lowest to highest
+var sorted_product_by_price = marketplace
+sorted_product_by_price = sort_by_price_asc(marketplace)
 // 3. Log the variable
-
+console.log(sorted_product_by_price)
 
 // 🎯 TODO: Sort by date
 // 1. Create a function to sort the marketplace objects by products date
+function sort_by_date_asc(marketplace){
+  return marketplace.sort((a, b) => (a.date > b.date) ? 1 : -1)
+}
 // 2. Create a variable and assign it the list of products by date from recent to old
+var sorted_product_by_date = marketplace
+sorted_product_by_date = sort_by_date_asc(marketplace)
 // 3. Log the variable
-
+console.log(sorted_product_by_date)
 
 // 🎯 TODO: Filter a specific price range
 // 1. Filter the list of products between 50€ and 100€
