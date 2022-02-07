@@ -53,10 +53,10 @@ console.log(longueur)
 
 // 🎯 TODO: Brands name
 // 1. Create a variable and assign it the list of brands name only
-var brand_names = []
 
-for(var i = 0; i < marketplace.length; i++){
-  if(!(brand_names.includes(marketplace[i].brand))){ // includes : true si la valeur est dedans sinon false
+let brand_names=[]
+for(var i=0; i<marketplace.length;i++){
+  if(!(brand_names.includes(marketplace[i].brand))){
     brand_names.push(marketplace[i].brand)
   }
 }
@@ -68,47 +68,48 @@ console.log(brand_names.length)
 
 // 🎯 TODO: Sort by price
 // 1. Create a function to sort the marketplace products by price
-function sort_by_price_asc(marketplace){
-  return marketplace.sort((a, b) => (a.price > b.price) ? 1 : -1)
+
+function sortbyprice(){
+  var marketplacebyPrice= marketplace.sort((a,b) => (a.price>b.price)?1:-1);
+  return marketplacebyPrice;
 }
+
 // 2. Create a variable and assign it the list of products by price from lowest to highest
-var sorted_product_by_price = marketplace
-sorted_product_by_price = sort_by_price_asc(marketplace)
+let sorted_products_price = sortbyprice()
 // 3. Log the variable
-console.log(sorted_product_by_price)
+console.log(sorted_products_price)
 
 // 🎯 TODO: Sort by date
 // 1. Create a function to sort the marketplace objects by products date
+
 function sort_by_date_asc(marketplace){
-  return marketplace.sort((a, b) => (a.date > b.date) ? 1 : -1)
+  return marketplace.sort((a, b) => (a.date<b.date) ? 1 : -1)
 }
 // 2. Create a variable and assign it the list of products by date from recent to old
-var sorted_product_by_date = marketplace
-sorted_product_by_date = sort_by_date_asc(marketplace)
+var sorted_product_by_date = sort_by_date_asc(marketplace)
 // 3. Log the variable
 console.log(sorted_product_by_date)
 
 // 🎯 TODO: Filter a specific price range
 // 1. Filter the list of products between 50€ and 100€
-var filter_50_100 = []
-marketplace.forEach(obj => (obj.price>50 && obj.price<100) ? filter_50_100.push(obj) : null)
+var list_50_100=marketplace.filter(function(products){
+  return (products.price>50 && products.price<100)
+});
 // 2. Log the list
-console.log(filter_50_100)
-
+console.log(list_50_100)
 
 // 🎯 TODO: Average price
 // 1. Determine the average price of the marketplace
-var baskets = []
-marketplace.forEach(obj => (obj.name.includes('basket')?baskets.push(obj):null))
-
-var count = 0, sumPrice = 0;
-for (var key in baskets) {
-  sumPrice += baskets[key].price;
-  count += 1;
+function average_price(){
+  var sum=0
+  for(var i=0;i<marketplace.length;i++){
+    sum+=marketplace[i].price;
+  }
+  return sum/marketplace.length
 }
-
 // 2. Log the average
-console.log(sumPrice/count);
+let avg=average_price()
+console.log(avg)
 
 /**
  * 🏎
