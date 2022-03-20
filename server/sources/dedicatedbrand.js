@@ -50,3 +50,7 @@ module.exports.scrape = async url => {
     return null;
   }
 };
+
+const result = await fetch('https://www.dedicatedbrand.com/en/loadfilter?category=men%2Fall-men');
+        const x   = await result.json();
+        products = x.products;

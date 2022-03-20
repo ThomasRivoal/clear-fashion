@@ -1,17 +1,36 @@
 // Invoking strict mode https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode#invoking_strict_mode
 'use strict';
 
+// current products on the page
 let currentProducts = [];
 let currentPagination = {};
 let favouriteuuid =[];
 let favouritelist=[];
+let filterBrand = "noFilter";
+let filterRecent = "no";
+let filterReasonable = "no";
+let sortFilter = "notSorted";
+let setFavorite = new Set();
+let filterFavorite = "no";
 
-// inititiqte selectors
+// inititiate selectors
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
 const selectBrands = document.querySelector('#brand-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
+const spanNbNewProducts = document.querySelector('#nbNewProducts')
+const spanP50 = document.querySelector('#p50');
+const spanP90 = document.querySelector('#p90');
+const spanP95 = document.querySelector('#p95');
+const spanLastRelease = document.querySelector('#last_release');
+const selectFilterRecent = document.querySelector('#recent-select');
+const selectFilterReasonable = document.querySelector('#reasonable-select');
+const selectFilterFavorite = document.querySelector("#favorite-select");
+const selectSort = document.querySelector('#sort-select');
+
+
+
 /**
  * Set global value
  * @param {Array} result - products to display
@@ -21,30 +40,83 @@ const setCurrentProducts = ({result, meta}) => {
   currentProducts = result;
   currentPagination = meta;
 };
+
 /**
  * Fetch products from api
  * @param  {Number}  [page=1] - current page to fetch
  * @param  {Number}  [size=12] - size of the page
  * @return {Object}
  */
-const fetchProducts = async (page = 1, size = 12) => {
+
+ const fetchProducts = async (page = 1, size = 12) => {
   try {
     const response = await fetch(
       `https://clear-fashion-api.vercel.app?page=${page}&size=${size}`
     );
     const body = await response.json();
+    var groupbyBrand = body.data.result.reduce(function(groups, item) {
+      const val = item["brand"]
+      groups[val] = groups[val] || []
+      groups[val].push(item)
+      return groups
+    }, {});
+    var selectBox = document.getElementById('brand-select');
+    selectBox.options.length=0;
+    selectBox.options.add( new Option("-", "noFilter", false));
+    for (var i =0, l = Object.keys(groupbyBrand).length; i< l; i++){
+      var option = Object.keys(groupbyBrand)[i];
+      selectBox.options.add( new Option(option, option, false));
+    }
+    selectBox.options.add(new Option("No filter", "noFilter", false));
+    if (filterBrand!="noFilter"){
+      body.data.result = groupbyBrand[filterBrand]
+    }
+    if (filterReasonable == "yes"){
+      body.data.result = body.data.result.filter(a => a.price<50)
+    }
+    if (filterRecent == "yes"){
+      body.data.result = body.data.result.filter(a => isNew(a) == "True");
+    }
+    if (filterFavorite == "yes"){
+      body.data.result = body.data.result.filter(a => setFavorite.has(a.uuid) == true);
+    }
     if (body.success !== true) {
       console.error(body);
       return {currentProducts, currentPagination};
+    }
+    switch(sortFilter){
+      case 'price-asc':
+        body.data.result = body.data.result.sort((a,b)=> a.price - b.price);
+        break;
+      case 'price-desc':
+        body.data.result = body.data.result.sort((a,b)=> b.price - a.price);
+        break;
+      case 'date-asc':
+        body.data.result = body.data.result.sort(function(a,b){
+          if (a.released<b.released) {
+            return -1;
+          } else {
+            return 1;
+        };});
+        break;
+      case 'date-desc':
+        body.data.result = body.data.result.sort(function(a,b){
+          if (a.released>b.released) {
+            return -1;
+          } else {
+            return 1;
+        };});
+        break;    
     }
     return body.data;
   } catch (error) {
     console.error(error);
     return {currentProducts, currentPagination};
   }
+  
 };
-function favourite(uuidElement)
-{favouriteuuid.push(uuidElement);}
+
+
 /**
  * Render list of products
  * @param  {Array} products
@@ -226,7 +298,7 @@ selectSort.addEventListener('change',event =>{
 document.addEventListener('DOMContentLoaded', () =>
   fetchProducts()
     .then(setCurrentProducts)
-    .then(() => render2(currentProducts, currentPagination,'No brand selected'))
+    .then(() => render2(currentProducts, currentPagination))
 );
 
 
