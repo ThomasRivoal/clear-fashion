@@ -1,6 +1,7 @@
 var MongoClient = require('mongodb').MongoClient;
 const MONGODB_URI = 'mongodb+srv://ThomasRiv:esilv@clearfashion.21byd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 const MONGODB_DB_NAME = 'clearfashion';
+const { calculateLimitAndOffset, paginate } = require('paginate-info');
 
 async function Connect(){
     client = await MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true});
