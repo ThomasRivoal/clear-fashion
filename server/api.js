@@ -2,6 +2,7 @@ const cors = require('cors');
 const express = require('express');
 const helmet = require('helmet');
 const collection = require('./db')
+const { calculateLimitAndOffset, paginate } = require('paginate-info')
 
 const PORT = 8092;
 
@@ -23,6 +24,29 @@ app.listen(PORT);
 
 console.log('📡 Running on port ${PORT}');
 
+app.get('/products', async(request, response) => {
+  await collection.getDB();
+
+  const filters = request.query;
+  console.log(filters)
+  const count = await collection.docu();
+  const { limit, offset } = calculateLimitAndOffset(parseInt(filters.page), parseInt(filters.size))
+  const products = await collection.find(offset,{}, limit);
+  const meta = paginate(parseInt(filters.page), count, products, parseInt(filters.size))
+
+  response.send(
+    {
+      "success" : true, 
+      "data" : {
+        "result" : products, 
+        "meta" : meta
+      }
+    }
+  );
+  
+});
+
+/*
 app.get("/products", async(request, response)=>{
   try{
     //let limit = 12;
@@ -139,7 +163,7 @@ app.get("/products", async(request, response)=>{
   }
   
 })
-
+*/
 
 app.get("/products/:id",async (request,response)=>{
   
