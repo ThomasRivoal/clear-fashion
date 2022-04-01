@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap');
+
+@font-face {
+    font-family: "font-1";
+    src: url(./LuxuriousRoman-Regular.ttf);
+}
+
+*{
+    box-sizing: border-box;
+}
+
+body{
+   font-family: "font-1";
+   text-align: center;
+   background: url(./bg.jpg);
+   background-position: center top;
+   height: 100vh;
+   background-color: rgba(223, 187, 228, 0.836);
+}
+
+h1{
+    text-transform: uppercase; 
+    letter-spacing: 4px;
+    font-size: 4rem;
+    
+    color: rgb(255, 255, 255);
+    text-shadow: -5px 1px 4px rgba(20, 43, 173, 0.76);
+    text-align: center;
+    font-family: 'Dongle', sans-serif;
+}
+
+h2{
+    text-align: center;
+    font-family: "Helvetica", "Arial", sans-serif;
+    color: rgb(255, 255, 255);
+    text-shadow: -5px 1px 4px rgba(0, 0, 0, 0.76);
+
+}
+
+p{
+    font-family: "Helvetica", "Arial", sans-serif;
+}
+main{
+    color: rgb(209, 146, 28);
+    background: rgba(255, 255, 255, 0.384);
+    width: 40%;
+    min-height: 100px;
+    margin: 10px auto;
+    padding: 10px 16px;
+    /* margin: 300px 20px; */
+}
